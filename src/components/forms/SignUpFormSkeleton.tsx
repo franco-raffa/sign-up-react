@@ -21,6 +21,9 @@ export const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().min(6, "At least 6 characters").required("Password is required"),
+  confirm_password: Yup.string()
+    .oneOf([Yup.ref('password'), ''], 'Passwords must match')
+    .required('Please confirm your password'),
   country: Yup.string().required("Country is required"),
 });
 
@@ -33,7 +36,7 @@ export interface SignUpFormSkeletonProps {
   ) => void | Promise<void>;
 }
 
-const initialValues: SignupData = {
+const initialValues: SignupData & { confirm_password: string } = {
   user_type: "researcher",
   first_name: "",
   last_name: "",
@@ -41,6 +44,7 @@ const initialValues: SignupData = {
   email: "",
   password: "",
   country: "",
+  confirm_password: "",
 };
 
 const userTypeOptions = [
@@ -177,7 +181,7 @@ export function SignUpFormSkeleton({ countries, loadingCountries, onSubmit }: Si
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Field name="password">
-              {({ field }: FieldProps<SignupData>) => (
+              {({ field }: FieldProps<SignupData & { confirm_password: string }>) => (
                 <Input
                   id="password"
                   name={field.name}
@@ -193,6 +197,29 @@ export function SignUpFormSkeleton({ countries, loadingCountries, onSubmit }: Si
             </Field>
             <ErrorMessage
               name="password"
+              component="p"
+              className="mt-1 text-xs text-red-600"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirm_password">Confirm Password</Label>
+            <Field name="confirm_password">
+              {({ field }: FieldProps<SignupData & { confirm_password: string }>) => (
+                <Input
+                  id="confirm_password"
+                  name={field.name}
+                  value={typeof field.value === "string" ? field.value : ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  type="password"
+                  placeholder="Repeat your password"
+                  autoComplete="new-password"
+                  required
+                />
+              )}
+            </Field>
+            <ErrorMessage
+              name="confirm_password"
               component="p"
               className="mt-1 text-xs text-red-600"
             />

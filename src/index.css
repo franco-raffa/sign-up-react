@@ -121,3 +121,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .text-red-600 {
+    color: #dc2626 !important;
+  }
+}
