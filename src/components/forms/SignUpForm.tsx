@@ -8,7 +8,9 @@ import { SignUpFormSkeleton } from "./SignUpFormSkeleton";
 import type { FormikHelpers } from "formik";
 
 const SignUpForm: React.FC = () => {
-  const [countries, setCountries] = React.useState<{ id: string; full_name: string; flag_shape?: string }[]>([]);
+  const [countries, setCountries] = React.useState<
+    { id: string; full_name: string; flag_shape?: string }[]
+  >([]);
   const [loadingCountries, setLoadingCountries] = React.useState(true);
 
   React.useEffect(() => {
@@ -30,18 +32,29 @@ const SignUpForm: React.FC = () => {
     try {
       const res = await signupUser(values);
       formikHelpers.setStatus({ success: true });
-      toast.success("User created successfully! Please check your email to verify your account.");
+      toast.success(
+        "User created successfully! Please check your email to verify your account."
+      );
       console.log("Respuesta de la API:", res);
     } catch (err) {
-      // err puede ser unknown, así que lo tipamos correctamente
-      const apiMsg =
-        (err && typeof err === "object" && "response" in err && err.response && typeof err.response === "object" && "data" in err.response && err.response.data && typeof err.response.data === "object" && "message" in err.response.data)
-          ? (err.response.data as { message?: string }).message || "Unexpected error"
-          : err instanceof Error
-            ? err.message
-            : "Unexpected error";
+      let errorMessage = "Unexpected error";
+
+      if (err && typeof err === "object" && "response" in err) {
+        const response = err.response;
+        if (response && typeof response === "object" && "data" in response) {
+          const data = response.data;
+          if (typeof data === "string") {
+            errorMessage = data;
+          } else if (data && typeof data === "object" && "message" in data) {
+            errorMessage = data.message as string;
+          }
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
       formikHelpers.setStatus({ success: false });
-      toast.error(apiMsg);
+      toast.error(errorMessage);
       console.error("Error en signupUser:", err);
     } finally {
       formikHelpers.setSubmitting(false);

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 import animatePlugin from "tailwindcss-animate";
+import scrollbarPlugin from "tailwind-scrollbar";
 
 export default {
   content: [
@@ -108,6 +109,7 @@ export default {
   },
   plugins: [
     animatePlugin,
+    scrollbarPlugin({ nocompatible: true }),
     // require('@tailwindcss/forms'), // Descomenta si usas formularios de shadcn/ui
   ],
 };
