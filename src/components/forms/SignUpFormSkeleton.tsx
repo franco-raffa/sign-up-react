@@ -75,7 +75,7 @@ export function SignUpFormSkeleton({
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting, setFieldValue, values }) => (
+      {({ isSubmitting, setFieldValue, values, isValid }) => (
         <Form className="w-full h-full flex flex-col">
           <FormTitle>Sign Up</FormTitle>
 
@@ -119,7 +119,7 @@ export function SignUpFormSkeleton({
                       value={typeof field.value === "string" ? field.value : ""}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      placeholder="John"
+                      placeholder=" John"
                       autoComplete="given-name"
                       required
                     />
@@ -143,7 +143,7 @@ export function SignUpFormSkeleton({
                       value={typeof field.value === "string" ? field.value : ""}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      placeholder="Doe"
+                      placeholder=" Doe"
                       autoComplete="family-name"
                       required
                     />
@@ -168,7 +168,7 @@ export function SignUpFormSkeleton({
                     value={typeof field.value === "string" ? field.value : ""}
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    placeholder="johndoe123"
+                    placeholder=" johndoe123"
                     autoComplete="username"
                     required
                   />
@@ -193,7 +193,7 @@ export function SignUpFormSkeleton({
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     type="email"
-                    placeholder="john.doe@example.com"
+                    placeholder=" john.doe@example.com"
                     autoComplete="email"
                     required
                   />
@@ -218,7 +218,7 @@ export function SignUpFormSkeleton({
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     type="password"
-                    placeholder="••••••••"
+                    placeholder=" ••••••••"
                     autoComplete="new-password"
                     required
                   />
@@ -243,7 +243,7 @@ export function SignUpFormSkeleton({
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     type="password"
-                    placeholder="Repeat your password"
+                    placeholder=" Repeat your password"
                     autoComplete="new-password"
                     required
                   />
@@ -293,7 +293,7 @@ export function SignUpFormSkeleton({
           <Button
             type="submit"
             className="mt-8 w-full p-[0.4rem]"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isValid}
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2 justify-center">
