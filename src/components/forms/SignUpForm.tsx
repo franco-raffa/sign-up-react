@@ -6,12 +6,14 @@ import { signupUser } from "@/api/examplePost";
 import type { SignupData } from "@/api/interfaces/auth.types";
 import { SignUpFormSkeleton } from "./SignUpFormSkeleton";
 import type { FormikHelpers } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm: React.FC = () => {
   const [countries, setCountries] = React.useState<
     { id: string; full_name: string; flag_shape?: string }[]
   >([]);
   const [loadingCountries, setLoadingCountries] = React.useState(true);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     getCountries()
@@ -31,6 +33,11 @@ const SignUpForm: React.FC = () => {
   ) {
     try {
       const res = await signupUser(values);
+      if (res && res.status === "successful") {
+        localStorage.setItem("username", values.username);
+        localStorage.setItem("password", values.password);
+        navigate("/login");
+      }
       formikHelpers.setStatus({ success: true });
       toast.success(
         "User created successfully! Please check your email to verify your account."
